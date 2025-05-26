@@ -1,0 +1,38 @@
+name: Run Tests (Jest + Cypress)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Use Node.js 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Jest unit tests
+        run: npm run test
+
+      - name: Start backend server (background)
+        run: |
+          npm run start &
+          sleep 5 #  give the server time to start
+
+      - name: Run Cypress E2E tests
+        uses: cypress-io/github-action@v5
+        with:
+          start: npm run start
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 30

@@ -1,0 +1,5 @@
+"scripts": {
+  "start": "node server.js",             
+  "test": "jest",                        // Jest unit tests
+  "cy:run": "cypress run"                // (opcional)
+}
